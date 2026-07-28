@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  Aluno
+  Instrutor
+  ADMIN
+}
+
+model User {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  email String  @unique
+  name  String?
+  age   String
+  password String
+  role Role     @default(Aluno)
+  aluno  Aluno?
+  instrutor  Instrutor?
+  criadoEm  DateTime @default(now())
+}
+
+model Aluno {
+  // Mesmo id do User (chave primária compartilhada) — facilita integrações futuras
+  id       String  @id @map("_id") @db.ObjectId
+  nome     String
+  telefone String
+  cpf      String  @unique
+
+  // Conectando este Aluno ao seu respectivo User (Login)
+  user     User    @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  solicitacoes SolicitacaoAula[]
+}
+
+model Instrutor {
+  // Mesmo id do User (chave primária compartilhada) — facilita integrações futuras
+  id           String  @id @map("_id") @db.ObjectId
+  nome         String
+  telefone     String
+  cnh          String  @unique
+  placaVeiculo String
+  disponivel   Boolean @default(false)
+
+  // Conectando este Instrutor ao seu respectivo User (Login)
+  user         User    @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  solicitacoes SolicitacaoAula[]
+}
+
+model SolicitacaoAula {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  status      String   @default("PENDENTE") 
+  localOrigem String
+  dataHora    DateTime
+  preco       Float?
+  
+  aluno       Aluno    @relation(fields: [alunoId], references: [id])
+  alunoId     String   @db.ObjectId
+  
+  instrutor   Instrutor? @relation(fields: [instrutorId], references: [id])
+  instrutorId String?    @db.ObjectId
+  
+  criadoEm    DateTime   @default(now())
+}
