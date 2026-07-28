@@ -1,11 +1,6 @@
 import { app } from './src/app.js'
-
-const PORT = process.env.PORT || 3000
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT} 🚀`)
-  console.log(`Documentação disponível em: http://localhost:${PORT}/docs 📄`)
-})
+import swaggerUi from 'swagger-ui-express'
+import swaggerJsDoc from 'swagger-jsdoc'
 
 const swaggerOptions = {
   definition: {
@@ -16,7 +11,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: '/', // 👈 Recomendado: faz as requisições no mesmo domínio em que o Swagger estiver aberto
+        url: '/', // Usa a origem de onde estiver rodando (Render ou Local)
         description: 'Servidor Atual',
       },
       {
@@ -29,5 +24,16 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./src/routes/*.js'], // caminho das suas rotas
+  apis: ['./src/routes/*.js'],
 };
+
+// Gera a documentação e registra a rota /docs no app
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT} 🚀`)
+  console.log(`Documentação disponível na rota /docs 📄`)
+})
