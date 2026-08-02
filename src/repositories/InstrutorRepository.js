@@ -46,4 +46,11 @@ export class InstrutorRepository {
       data: { disponivel }
     })
   }
+
+  async updatePriceAula(id, precoAula) {
+    return await prisma.instrutor.update({
+      where: { id },
+      data: { precoAula }
+    })
+  }
 }

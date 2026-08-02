@@ -126,4 +126,36 @@ instrutorRoutes.get('/instrutores/usuario/:userId', (req, res) => instrutorContr
  */
 instrutorRoutes.patch('/instrutores/:id/disponibilidade', (req, res) => instrutorController.updateDisponibilidade(req, res))
 
+/**
+ * @swagger
+ * /instrutores/{id}/preco-aula:
+ *   patch:
+ *     summary: Atualiza o preço por aula do instrutor
+ *     tags: [Instrutores]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [precoAula]
+ *             properties:
+ *               precoAula:
+ *                 type: number
+ *             example:
+ *               precoAula: 120.5
+ *     responses:
+ *       200:
+ *         description: Preço por aula atualizado
+ *       400:
+ *         description: Instrutor não encontrado ou valor inválido
+ */
+instrutorRoutes.patch('/instrutores/:id/preco-aula', (req, res) => instrutorController.updatePriceAula(req, res))
+
 export { instrutorRoutes }

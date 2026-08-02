@@ -51,6 +51,7 @@ model Instrutor {
   cnh          String  @unique
   placaVeiculo String
   disponivel   Boolean @default(false)
+  precoAula    Float?
 
   // Conectando este Instrutor ao seu respectivo User (Login)
   user         User    @relation(fields: [id], references: [id], onDelete: Cascade)

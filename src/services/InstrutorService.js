@@ -55,4 +55,22 @@ export class InstrutorService {
     }
     return await this.instrutorRepository.updateDisponibilidade(id, disponivel)
   }
+
+  async updatePriceAula(id, precoAula) {
+    const instrutor = await this.instrutorRepository.findById(id)
+    if (!instrutor) {
+      throw new Error('Instrutor não encontrado.')
+    }
+
+    if (precoAula === undefined || precoAula === null) {
+      throw new Error('precoAula é obrigatório.')
+    }
+
+    const precoNumerico = Number(precoAula)
+    if (Number.isNaN(precoNumerico) || precoNumerico < 0) {
+      throw new Error('precoAula deve ser um número válido e maior ou igual a zero.')
+    }
+
+    return await this.instrutorRepository.updatePriceAula(id, precoNumerico)
+  }
 }

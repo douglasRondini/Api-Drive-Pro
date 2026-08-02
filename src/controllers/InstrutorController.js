@@ -56,4 +56,15 @@ export class InstrutorController {
       return res.status(400).json({ error: error.message })
     }
   }
+
+  async updatePriceAula(req, res) {
+    try {
+      const { id } = req.params
+      const { precoAula } = req.body
+      const instrutor = await instrutorService.updatePriceAula(id, precoAula)
+      return res.status(200).json(instrutor)
+    } catch (error) {
+      return res.status(400).json({ error: error.message })
+    }
+  }
 }
