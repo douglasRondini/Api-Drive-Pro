@@ -1,5 +1,6 @@
 import express from 'express'
 import path from 'path'
+import cors from 'cors'
 import swaggerUi from 'swagger-ui-express'
 import { fileURLToPath } from 'url'
 import { userRoutes } from './routes/userRoutes.js';
@@ -12,6 +13,14 @@ import { swaggerDocs } from './config/swagger.js'
 const app = express()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://web-drive-pro.onrender.com'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
+app.options('*', cors())
 
 app.use(express.json())
 
