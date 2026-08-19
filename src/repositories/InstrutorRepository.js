@@ -29,6 +29,22 @@ export class InstrutorRepository {
     })
   }
 
+  async findAll() {
+    return await prisma.instrutor.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            criadoEm: true
+          }
+        }
+      }
+    })
+  }
+
   async findAllDisponiveis() {
     return await prisma.instrutor.findMany({
       where: { disponivel: true },

@@ -1,6 +1,7 @@
 import { app } from './src/app.js'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
+import { ensureDefaultAdmin } from './src/config/adminBootstrap.js'
 
 const swaggerOptions = {
   definition: {
@@ -33,7 +34,15 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT} 🚀`)
-  console.log(`Documentação disponível na rota /docs 📄`)
-})
+ensureDefaultAdmin()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT} 🚀`)
+      console.log(`Documentação disponível na rota /docs 📄`)
+      console.log('Administrador padrão pronto para login: admin@drivepro.com / DrivePro@123')
+    })
+  })
+  .catch((error) => {
+    console.error('Erro ao iniciar administrador padrão:', error)
+    process.exit(1)
+  })

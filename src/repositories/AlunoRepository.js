@@ -28,4 +28,20 @@ export class AlunoRepository {
       where: { cpf }
     })
   }
+
+  async findAll() {
+    return await prisma.aluno.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            criadoEm: true
+          }
+        }
+      }
+    })
+  }
 }

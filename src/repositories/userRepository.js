@@ -48,13 +48,19 @@ export class UserRepository {
     return await prisma.user.findUnique({ where: { id } })
   }
 
+  async deleteById(id) {
+    return await prisma.user.delete({ where: { id } })
+  }
+
  async findAll() {
     return await prisma.user.findMany({
       select: {
         id: true,
         email: true,
         name: true,
-        age: true
+        age: true,
+        role: true,
+        criadoEm: true
       }
     })
   }

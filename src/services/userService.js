@@ -86,7 +86,7 @@ export class UserService {
 
     // 3. Gera o token JWT válido por 7 dias
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: '7d' }
     )
